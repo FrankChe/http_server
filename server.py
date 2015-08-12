@@ -3,6 +3,7 @@ __author__ = 'chexiaoyu'
 import socket
 import spider_class
 import convert_json
+import MySQLdb
 import json
 import operation
 HOST, PORT = '',8880
@@ -19,8 +20,18 @@ while True:
 
     sp = spider_class.Spider()
     sp.start()
+    stories = sp.stories
+
+    for item in stories:
+        sql = "insert into Cnblogs(recomment, title, author, date, comment, reading) values(％s,%s,%s,%s,%s)"
+        conn.execute(sql,item)
+    conn.commit()
+
+
+
     js = convert_json.Con_json()
     str_json = js.convert(sp)
+
 
 
     http_response = """
